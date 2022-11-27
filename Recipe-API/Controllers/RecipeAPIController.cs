@@ -40,6 +40,12 @@ namespace Recipe_API.Controllers
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
         public ActionResult<RecipeDTO> CreateRecipe([FromBody]RecipeDTO recipeDTO)
         {
+            if (RecipeStore.recipeList.FirstOrDefault(x => x.Title.ToLower() == recipeDTO.Title.ToLower()) != null)
+            {
+                ModelState.AddModelError("CustomeError","Recipe already exists!");
+                return BadRequest(ModelState);
+            }
+
             if (recipeDTO == null) 
             {
                 return BadRequest(recipeDTO);
@@ -48,9 +54,34 @@ namespace Recipe_API.Controllers
             {
                 return StatusCode(StatusCodes.Status500InternalServerError);
             }
-            recipeDTO.Id = RecipeStore.recipeList.OrderByDescending(u => u.Id).FirstOrDefault().Id + 1;
+            recipeDTO.Id = RecipeStore.recipeList.OrderByDescending(x => x.Id).FirstOrDefault().Id + 1;
             RecipeStore.recipeList.Add(recipeDTO);
             return CreatedAtRoute("GetRecipe",new { id= recipeDTO.Id}, recipeDTO);
         }
+
+        [ProducesResponseType(StatusCodes.Status204NoContent)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [HttpDelete("{id=int}", Name = "DeleteRecipe")]
+        public IActionResult DeleteRecipe(int id)
+        {
+            if (id == 0)
+            {
+                return BadRequest();
+            }
+            var recipe = RecipeStore.recipeList.FirstOrDefault(x => x.Id == id);
+            if (recipe == null )
+            {
+                return NotFound();
+            }
+            RecipeStore.recipeList.Remove(recipe);
+            return NoContent();
+        }
+        [HttpPut("{id:int}", Name ="UpdateRecipe")]
+        public IActionResult UpdateRecipe(int id, JsonPatchDocument) 
+        {
+
+        }
     }
+    
 }
