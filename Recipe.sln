@@ -3,7 +3,9 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.3.32929.385
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Recipe-API", "Recipe-API\Recipe-API.csproj", "{063BC2F2-89E8-4A3F-B9DF-A2FF86012F29}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Recipe-API", "Recipe-API\Recipe-API.csproj", "{063BC2F2-89E8-4A3F-B9DF-A2FF86012F29}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Recipe", "..\..\Recipe Project\Recipe\Recipe.csproj", "{ADF2EA1E-F4FB-447C-8E88-780DACA5C879}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -15,6 +17,10 @@ Global
 		{063BC2F2-89E8-4A3F-B9DF-A2FF86012F29}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{063BC2F2-89E8-4A3F-B9DF-A2FF86012F29}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{063BC2F2-89E8-4A3F-B9DF-A2FF86012F29}.Release|Any CPU.Build.0 = Release|Any CPU
+		{ADF2EA1E-F4FB-447C-8E88-780DACA5C879}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{ADF2EA1E-F4FB-447C-8E88-780DACA5C879}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{ADF2EA1E-F4FB-447C-8E88-780DACA5C879}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{ADF2EA1E-F4FB-447C-8E88-780DACA5C879}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
