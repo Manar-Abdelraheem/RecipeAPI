@@ -58,13 +58,10 @@ namespace Recipe_API.Controllers
             {
                 return StatusCode(StatusCodes.Status500InternalServerError);
             }
-            if (recipeList != null)
-            {
-                recipeDTO.Id = recipeList.OrderByDescending(x => x.Id).FirstOrDefault().Id + 1;
-                recipeList?.Add(recipeDTO);
-            }
+            recipeDTO.Id = (recipeList?.OrderByDescending(x => x?.Id?? 0)?.FirstOrDefault()?.Id?? 0) + 1;
+            recipeList?.Add(recipeDTO);
             await ReadAndWrite.WriteRecipeFileAsync(recipeList);
-            return CreatedAtRoute("GetRecipe",new { id = recipeDTO.Id },recipeDTO);
+            return CreatedAtRoute("GetRecipe", new { id = recipeDTO.Id }, recipeDTO);
         }
 
         [HttpDelete("{id=int}", Name = "DeleteRecipe")]
