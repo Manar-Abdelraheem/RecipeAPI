@@ -43,7 +43,8 @@ namespace Recipe_API.Controllers
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
         public async Task<ActionResult<RecipeDTO>> CreateRecipe([FromBody] RecipeDTO recipeDTO)
         {
-            var recipeList = await ReadAndWrite.ReadRecipeFileAsync();
+            List<RecipeDTO> recipeList = new();
+            recipeList = await ReadAndWrite.ReadRecipeFileAsync();
             if (recipeDTO == null)
             {
                 return BadRequest(recipeDTO);
@@ -59,11 +60,12 @@ namespace Recipe_API.Controllers
             }
             if (recipeList != null)
             {
-            recipeDTO.Id = recipeList.OrderByDescending(x => x.Id).FirstOrDefault().Id + 1;
-            recipeList.Add(recipeDTO);
+                Func<RecipeDTO, int?> keySelector = x => x.Id;
+                recipeDTO.Id = recipeList?.OrderByDescending(keySelector).FirstOrDefault().Id + 1;
+                recipeList.Add(recipeDTO);
             }
             await ReadAndWrite.WriteRecipeFileAsync(recipeList);
-            return CreatedAtRoute("GetRecipe",new { id= recipeDTO.Id },recipeDTO);
+            return CreatedAtRoute("GetRecipe",new { id = recipeDTO.Id },recipeDTO);
         }
 
         [HttpDelete("{id=int}", Name = "DeleteRecipe")]
@@ -77,7 +79,7 @@ namespace Recipe_API.Controllers
                 return BadRequest();
             }
             var recipe = RecipeStore.recipeList.FirstOrDefault(x => x.Id == id);
-            if (recipe == null )
+            if (recipe == null)
             {
                 return NotFound();
             }
@@ -95,9 +97,9 @@ namespace Recipe_API.Controllers
                 return BadRequest();
             }
             var recipelist = await ReadAndWrite.ReadRecipeFileAsync();
-            if (recipelist != null)
+            var recipe = recipelist.FirstOrDefault(x => x.Id == id);
+            if (recipe != null)
             {
-                var recipe = recipelist.FirstOrDefault(x => x.Id == id);
                 recipe.Title = recipeDTO.Title;
                 recipe.Ingredients = recipeDTO.Ingredients;
                 recipe.Instructions = recipeDTO.Instructions;
