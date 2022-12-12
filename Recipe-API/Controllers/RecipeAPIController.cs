@@ -60,9 +60,8 @@ namespace Recipe_API.Controllers
             }
             if (recipeList != null)
             {
-                Func<RecipeDTO, int?> keySelector = x => x.Id;
-                recipeDTO.Id = recipeList?.OrderByDescending(keySelector).FirstOrDefault().Id + 1;
-                recipeList.Add(recipeDTO);
+                recipeDTO.Id = recipeList.OrderByDescending(x => x.Id).FirstOrDefault().Id + 1;
+                recipeList?.Add(recipeDTO);
             }
             await ReadAndWrite.WriteRecipeFileAsync(recipeList);
             return CreatedAtRoute("GetRecipe",new { id = recipeDTO.Id },recipeDTO);

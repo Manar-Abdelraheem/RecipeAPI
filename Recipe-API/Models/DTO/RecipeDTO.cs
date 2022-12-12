@@ -4,7 +4,7 @@ namespace Recipe_API.Models.DTO
 {
     public class RecipeDTO
     {
-        public int? Id { get; set; } = null; 
+        public int Id { get; set; } 
         [Required]
         [MaxLength(40)]
         public string Title { get; set; } = "";
