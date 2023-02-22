@@ -9,8 +9,10 @@ namespace Recipe_API.Data
         public  static async Task<List<RecipeDTO>> ReadRecipeFileAsync()
         {
             var deserializationString = await File.ReadAllTextAsync(@"Recipe.json");
-            var jsonObject = JsonSerializer.Deserialize<List<RecipeDTO>>(deserializationString);
-            if (jsonObject == null)
+            if (string.IsNullOrWhiteSpace(deserializationString))
+                { return new List<RecipeDTO>(); }
+            var jsonObject = JsonSerializer.Deserialize<List<RecipeDTO>>(deserializationString);           
+            if (jsonObject == null )
             {
                 return new List<RecipeDTO> { new RecipeDTO() };
             }
