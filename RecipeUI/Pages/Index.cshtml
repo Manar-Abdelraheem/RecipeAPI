@@ -7,11 +7,12 @@
 <div class="text-center">
     <h1 class="display-4">Recipes Application</h1>
 </div>
-    <div class="row">
-            <h2 class="text-primary">
+<div class="col-container">
+            <h2 class="col">
                 @foreach(var recipe in Model.Recipes)
                 {
-                    <span class="dot">@recipe.Title</span>
+               <button class="button">@recipe.Title</button>
+                   
                 }
             </h2>
-    </div>
+</div>

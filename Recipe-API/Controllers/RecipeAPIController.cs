@@ -29,7 +29,7 @@ namespace Recipe_API.Controllers
             {
                 return BadRequest();
             }
-            var recipe = RecipeStore.recipeList.FirstOrDefault(u => u.Id == id);
+            var recipe = RecipeStore.RecipeList.FirstOrDefault(u => u.Id == id);
             if(recipe == null) 
             {
                 return NotFound();
@@ -43,13 +43,13 @@ namespace Recipe_API.Controllers
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
         public async Task<ActionResult<RecipeDTO>> CreateRecipe([FromBody] RecipeDTO recipeDTO)
         {
-            List<RecipeDTO> recipeList = new();
+            List<RecipeDTO>? recipeList = new();
             recipeList = await ReadAndWrite.ReadRecipeFileAsync();
             if (recipeDTO == null)
             {
                 return BadRequest(recipeDTO);
             }
-            if (recipeList.FirstOrDefault(x => x.Title.ToLower() == recipeDTO.Title.ToLower()) != null)
+            if (recipeList!.FirstOrDefault(x => x!.Title!.ToLower() == recipeDTO!.Title!.ToLower()) != null)
             {
                 ModelState.AddModelError("CustomeError", "Recipe already exists!");
                 return BadRequest(ModelState);
@@ -58,7 +58,7 @@ namespace Recipe_API.Controllers
             {
                 return StatusCode(StatusCodes.Status500InternalServerError);
             }
-            recipeDTO.Id = (recipeList?.OrderByDescending(x => x?.Id?? 0)?.FirstOrDefault()?.Id?? 0) + 1;
+            recipeDTO.Id = (recipeList?.OrderByDescending(x => x?.Id ?? 0)?.FirstOrDefault() ?.Id ?? 0) + 1;
             recipeList?.Add(recipeDTO);
             await ReadAndWrite.WriteRecipeFileAsync(recipeList);
             return CreatedAtRoute("GetRecipe", new { id = recipeDTO.Id }, recipeDTO);
@@ -68,18 +68,20 @@ namespace Recipe_API.Controllers
         [ProducesResponseType(StatusCodes.Status204NoContent)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
-        public IActionResult DeleteRecipe(int id)
+        public async Task<IActionResult> DeleteRecipe(int id)
         {
             if (id == 0)
             {
                 return BadRequest();
             }
-            var recipe = RecipeStore.recipeList.FirstOrDefault(x => x.Id == id);
+            var recipelist = await ReadAndWrite.ReadRecipeFileAsync();
+            var recipe = recipelist.FirstOrDefault(x => x.Id == id);
             if (recipe == null)
             {
                 return NotFound();
             }
-            RecipeStore.recipeList.Remove(recipe);
+            recipelist.Remove(recipe);
+            await ReadAndWrite.WriteRecipeFileAsync(recipelist);
             return NoContent();
         }
 

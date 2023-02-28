@@ -1,16 +1,13 @@
+using Microsoft.AspNetCore.Mvc.Controllers;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Options;
-using RecipeUI.Data;
+
 
 var builder = WebApplication.CreateBuilder(args);
-
+builder.Services.AddHttpClient();
 // Add services to the container.
 builder.Services.AddRazorPages();
-builder.Services.AddDbContext<RecipeDbContext>(options => options.UseSqlServer(
-    builder.Configuration.GetConnectionString("constr")
-    ));
 var app = builder.Build();
-
 // Configure the HTTP request pipeline.
 if (!app.Environment.IsDevelopment())
 {

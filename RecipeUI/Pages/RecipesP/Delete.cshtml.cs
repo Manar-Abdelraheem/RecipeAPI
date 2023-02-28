@@ -2,7 +2,6 @@ using Microsoft.AspNetCore.Mvc;
 using RecipeUI.Models;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using System.ComponentModel;
-//using RecipeUI.Data;
 using System.Text.Json;
 using System.Text;
 using Microsoft.EntityFrameworkCore;
@@ -11,10 +10,10 @@ using static System.Net.Mime.MediaTypeNames;
 namespace RecipeUI.Pages.RecipesP
 {
         [BindProperties]
-    public class EditModel : PageModel
+    public class DeleteModel : PageModel
     {
         private readonly IHttpClientFactory _httpClientFactory;
-        public EditModel(IHttpClientFactory httpClientFactory) => _httpClientFactory = httpClientFactory;
+        public DeleteModel(IHttpClientFactory httpClientFactory) => _httpClientFactory = httpClientFactory;
         public Recipe? Recipe { get; set; }
         public async Task OnGetAsync(int? id)
         {
@@ -34,14 +33,14 @@ namespace RecipeUI.Pages.RecipesP
         }
         public async Task<IActionResult> OnPostAsync(int id ) 
         {
-            if (ModelState.IsValid)
-            {
                 var httpClient = _httpClientFactory.CreateClient();
-                var json = new StringContent(JsonSerializer.Serialize(Recipe), Encoding.UTF8, Application.Json);
-                using var httpResponseMessage = await httpClient.PutAsync($"https://localhost:7208/api/Recipes/{id}", json);
-                httpResponseMessage.EnsureSuccessStatusCode();
-                return RedirectToPage("Index");
-            }
+                if (Recipe != null)
+                { 
+                    Recipe.Id = id;
+                    using var httpResponseMessage = await httpClient.DeleteAsync($"https://localhost:7208/api/Recipes/{id}");
+                    httpResponseMessage.EnsureSuccessStatusCode();
+                    return RedirectToPage("Index");
+                }
             return Page();
         }
     }

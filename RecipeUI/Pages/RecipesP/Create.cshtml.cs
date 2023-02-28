@@ -2,29 +2,37 @@ using Microsoft.AspNetCore.Mvc;
 using RecipeUI.Models;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using System.ComponentModel;
-using RecipeUI.Data;
+using static System.Net.Mime.MediaTypeNames;
 using System.Text.Json;
 using System.Text;
+using System.Net.Http;
 
 namespace RecipeUI.Pages.RecipesP
 {
         [BindProperties]
     public class CreateModel : PageModel
     {
-        public static HttpClient client = new HttpClient();
-        public static Uri endPoint = new Uri("https://localhost:7208/api/Recipes");
+        private readonly IHttpClientFactory _httpClientFactory;
+
+        public CreateModel(IHttpClientFactory httpClientFactory) => _httpClientFactory = httpClientFactory;
         public void OnGet()
         {
 
         }
-        public Recipe Recipe { get; set; }
+        public Recipe? Recipe { get; set; }
         public async Task<IActionResult> OnPost(Recipe recipe) 
         {
+            if (recipe == null) 
+            {
+                return BadRequest();
+            }
+
             if (ModelState.IsValid)
             {
-                var json = JsonSerializer.Serialize(recipe);
-                var payload = new StringContent(json, Encoding.UTF8, "application/json");
-                await client.PostAsync(endPoint, payload);
+                var httpClient = _httpClientFactory.CreateClient();
+                var json = new StringContent(JsonSerializer.Serialize(recipe),Encoding.UTF8,Application.Json);
+                using var httpResponseMessage = await httpClient.PostAsync("https://localhost:7208/api/Recipes", json);
+                httpResponseMessage.EnsureSuccessStatusCode();
                 return RedirectToPage("Index");
             }
             return Page();
