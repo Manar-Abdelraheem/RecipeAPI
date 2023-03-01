@@ -7,12 +7,19 @@
 <div class="text-center">
     <h1 class="display-4">Recipes Application</h1>
 </div>
+<div class="align-content-lg-end text-end">
+    <a asp-page="create" class="btn btn-primary">
+        <i class="bi bi-plus-square"></i>&nbsp; Add new recipe
+    </a>
+</div>
 <div class="col-container">
             <h2 class="col">
                 @foreach(var recipe in Model.Recipes)
                 {
-               <button class="button">@recipe.Title</button>
-                   
+           @* <a asp-page="../Pages/RecipesP" asp-route-id="@recipe.Id" class="btn btn-primary">@recipe.Title</a>*@
+            <li class="nav-item">
+                <a class="btn btn-primary mx-2" asp-area="" asp-page="RecipeDetails" asp-route-id="@recipe.Id">@recipe.Title</a>
+            </li>
                 }
             </h2>
 </div>

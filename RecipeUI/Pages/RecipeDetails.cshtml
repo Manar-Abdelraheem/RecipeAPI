@@ -1,0 +1,26 @@
+﻿@page
+@model RecipeUI.Pages.RecipesP.DetailModel
+
+    <input hidden asp-for="Recipe.Id" />
+<table class ="table table-bordered table-striped" style="width:100%">
+    <h2 class="text-primary pl-3" style="text-align center">@Model.Recipe.Title</h2>
+        <tr>
+        <th width="25%">Title</th>
+        <td width="75%">@Model.Recipe.Title</td>
+        </tr>
+    <tr>
+        <th width="25%">Ingredients</th>
+        <td width="75%">@Model.Recipe.Ingredients</td>
+    </tr>
+    <tr>
+        <th width="25%">Instructions</th>
+        <td width="75%">@Model.Recipe.Instructions</td>
+    </tr>
+    <tr>
+        <th width="25%">Categories</th>
+        <td width="75%">@Model.Recipe.Categories</td>
+    </tr>
+</table>
+<a asp-page="Edit" class="btn btn-primary" style="width:150px;">Edit</a>
+<a asp-page="Delete" asp-route-id="Recipe.Id" class="btn btn-danger mx-2" /> <i class="bi bi-trash3"></i>
+<a asp-page="Index" class="btn btn-secondary" style="width:150px;">Back to list</a>

@@ -23,14 +23,15 @@ namespace Recipe_API.Controllers
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
-        public ActionResult<RecipeDTO> GetRecipe(int id)
+        public async Task< ActionResult<RecipeDTO>> GetRecipeAsync(int id)
         {
             if (id == 0) 
             {
                 return BadRequest();
             }
-            var recipe = RecipeStore.RecipeList.FirstOrDefault(u => u.Id == id);
-            if(recipe == null) 
+            var recipelist = await ReadAndWrite.ReadRecipeFileAsync();
+            var recipe = recipelist.FirstOrDefault(x => x.Id == id);
+            if (recipe == null) 
             {
                 return NotFound();
             }
