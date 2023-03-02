@@ -7,7 +7,7 @@ using System.Text.Json;
 using System.Text;
 using System.Net.Http;
 
-namespace RecipeUI.Pages.RecipesP
+namespace RecipeUI.Pages
 {
         [BindProperties]
     public class CreateModel : PageModel
@@ -19,7 +19,7 @@ namespace RecipeUI.Pages.RecipesP
         {
 
         }
-        public Recipe? Recipe { get; set; }
+        public Recipe Recipe { get; set; } = default!;
         public async Task<IActionResult> OnPost(Recipe recipe) 
         {
             if (recipe == null) 

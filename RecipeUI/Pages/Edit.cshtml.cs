@@ -6,17 +6,22 @@ using System.Text.Json;
 using System.Text;
 using Microsoft.EntityFrameworkCore;
 using static System.Net.Mime.MediaTypeNames;
+using Microsoft.IdentityModel.Tokens;
 
-namespace RecipeUI.Pages.RecipesP
+namespace RecipeUI.Pages
 {
         [BindProperties]
     public class EditModel : PageModel
     {
         private readonly IHttpClientFactory _httpClientFactory;
         public EditModel(IHttpClientFactory httpClientFactory) => _httpClientFactory = httpClientFactory;
-        public Recipe? Recipe { get; set; }
+        public Recipe Recipe { get; set; } = default!;
         public async Task OnGetAsync(int? id)
         {
+            if (Recipe == null)
+            {
+                BadRequest();
+            }
             var httpRequestMessage = new HttpRequestMessage(HttpMethod.Get, "https://localhost:7208/api/Recipes");
             var options = new JsonSerializerOptions()
             {
@@ -26,10 +31,11 @@ namespace RecipeUI.Pages.RecipesP
             var httpResponseMessage = await httpClient.SendAsync(httpRequestMessage);
             using var json = await httpResponseMessage.Content.ReadAsStreamAsync();
             var recipes = await JsonSerializer.DeserializeAsync<List<Recipe>>(json, options);
-            if (recipes != null)
+            if (recipes == null)
             {
-                Recipe = recipes.Find(x => x.Id == id);
+                BadRequest();
             }
+            Recipe = recipes.Find(x => x.Id == id);
         }
         public async Task<IActionResult> OnPostAsync(int id ) 
         {

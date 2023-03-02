@@ -8,14 +8,14 @@ using System.Text;
 using Microsoft.EntityFrameworkCore;
 using static System.Net.Mime.MediaTypeNames;
 
-namespace RecipeUI.Pages.RecipesP
+namespace RecipeUI.Pages
 {
     [BindProperties]
     public class DetailModel : PageModel
     {
         private readonly IHttpClientFactory _httpClientFactory;
         public DetailModel(IHttpClientFactory httpClientFactory) => _httpClientFactory = httpClientFactory;
-        public Recipe? Recipe { get; set; }
+        public Recipe Recipe { get; set; } = default!;
         public async Task OnGetAsync(int? id)
         {
             var httpRequestMessage = new HttpRequestMessage(HttpMethod.Get, "https://localhost:7208/api/Recipes");
@@ -27,10 +27,11 @@ namespace RecipeUI.Pages.RecipesP
             var httpResponseMessage = await httpClient.SendAsync(httpRequestMessage);
             using var json = await httpResponseMessage.Content.ReadAsStreamAsync();
             var recipes = await JsonSerializer.DeserializeAsync<List<Recipe>>(json, options);
-            if (recipes != null)
+            if (recipes == null)
             {
-                Recipe = recipes.Find(x => x.Id == id);
+                BadRequest();
             }
+                Recipe = recipes!.Find(x => x.Id == id);
         }
         public async Task<IActionResult> OnPostAsync(int id)
         {
@@ -38,7 +39,7 @@ namespace RecipeUI.Pages.RecipesP
             {
                 var httpClient = _httpClientFactory.CreateClient();
                 var json = new StringContent(JsonSerializer.Serialize(Recipe), Encoding.UTF8, Application.Json);
-                using var httpResponseMessage = await httpClient.PostAsync($"https://localhost:7208/api/Recipes/{id}", json);
+                using var httpResponseMessage = await httpClient.PutAsync($"https://localhost:7208/api/Recipes/{id}", json);
                 httpResponseMessage.EnsureSuccessStatusCode();
                 return RedirectToPage("Index");
             }

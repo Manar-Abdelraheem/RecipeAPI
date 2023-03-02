@@ -3,7 +3,6 @@
 @{
     ViewData["Title"] = "Home page";
 }
-
 <div class="text-center">
     <h1 class="display-4">Recipes Application</h1>
 </div>
@@ -13,13 +12,11 @@
     </a>
 </div>
 <div class="col-container">
-            <h2 class="col">
-                @foreach(var recipe in Model.Recipes)
-                {
-           @* <a asp-page="../Pages/RecipesP" asp-route-id="@recipe.Id" class="btn btn-primary">@recipe.Title</a>*@
-            <li class="nav-item">
-                <a class="btn btn-primary mx-2" asp-area="" asp-page="RecipeDetails" asp-route-id="@recipe.Id">@recipe.Title</a>
-            </li>
-                }
-            </h2>
+    <h2 class="col">
+
+        @foreach (var recipe in Model.Recipes)
+            {
+                <a class="btn btn-primary mx-2" asp-area="" asp-page="RecipeDetails" asp-route-id="@recipe.Id"><p role="img" aria-label="hamburger">🍔</p>@recipe.Title</a>
+            }  
+    </h2>
 </div>

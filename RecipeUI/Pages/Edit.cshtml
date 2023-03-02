@@ -1,33 +1,35 @@
 ﻿@page
-@model RecipeUI.Pages.RecipesP.EditModel
-
-<form method="post">
-    <input hidden asp-for="Recipe.Id" />
-    <div class="border" p-3 mt-2>
-        <div class="row" pb-4>
-            <h2 class="text-primary pl-3">Edit</h2>
+@model RecipeUI.Pages.EditModel
+@{
+    ViewData["Title"] = "Edit";
+}
+    <form method="post">
+        <input hidden asp-for="@Model.Recipe.Id" />
+        <div class="border" p-3 mt-2>
+            <div class="row" pb-4>
+                <h2 class="text-primary pl-3">Edit</h2>
+            </div>
+            <div class="mb-3">
+                <label asp-for="@Model.Recipe.Title"></label>
+                <input asp-for="@Model.Recipe.Title" class="form-control" />
+                <span asp-validation-for="@Model.Recipe.Title" class="text-danger"></span>
+            </div>
+            <div class="mb-3">
+                <label asp-for="@Model.Recipe.Ingredients"></label>
+                <input asp-for="@Model.Recipe.Ingredients" class="form-control" />
+                <span asp-validation-for="@Model.Recipe.Ingredients" class="text-danger"></span>
+            </div>
+            <div class="mb-3">
+                <label asp-for="@Model.Recipe.Instructions"></label>
+                <input asp-for="@Model.Recipe.Instructions" class="form-control" />
+                <span asp-validation-for="@Model.Recipe.Ingredients" class="text-danger"></span>
+            </div>
+            <div class="mb-3">
+                <label asp-for="@Model.Recipe.Categories"></label>
+                <input asp-for="@Model.Recipe.Categories" class="form-control" />
+                <span asp-validation-for="@Model.Recipe.Categories" class="text-danger"></span>
+            </div>
+            <button type="submit" asp-route-id="@Model.Recipe.Id" class="btn btn-primary" style="width:150px;">Done</button>
+            <a asp-page="Index" class="btn btn-secondary" style="width:150px;">Back to list</a>
         </div>
-        <div class="mb-3">
-            <label asp-for="Recipe.Title"></label>
-            <input asp-for="Recipe.Title" class="form-control" />
-            <span asp-validation-for="Recipe.Title" class="text-danger"></span>
-        </div>
-        <div class="mb-3">
-            <label asp-for="Recipe.Ingredients"></label>
-            <input asp-for="Recipe.Ingredients" class="form-control" />
-            <span asp-validation-for="Recipe.Ingredients" class="text-danger"></span>
-        </div>
-        <div class="mb-3">
-            <label asp-for="Recipe.Instructions"></label>
-            <input asp-for="Recipe.Instructions" class="form-control" />
-            <span asp-validation-for="Recipe.Ingredients" class="text-danger"></span>
-        </div>
-                <div class="mb-3">
-            <label asp-for="Recipe.Categories"></label>
-            <input asp-for="Recipe.Categories" class="form-control" />
-            <span asp-validation-for="Recipe.Categories" class="text-danger"></span>
-        </div>
-        <button type="submit" class="btn btn-primary" style="width:150px;">Edit</button>
-        <a asp-page="Index" class="btn btn-secondary" style="width:150px;">Back to list</a>
-    </div>
-</form>
+    </form>
