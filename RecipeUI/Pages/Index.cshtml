@@ -13,8 +13,7 @@
 </div>
 <div class="col-container">
     <h2 class="col">
-
-        @foreach (var recipe in Model.Recipes)
+        @foreach (var recipe in Model.Recipes!)
             {
                 <a class="btn btn-primary mx-2" asp-area="" asp-page="RecipeDetails" asp-route-id="@recipe.Id"><p role="img" aria-label="hamburger">🍔</p>@recipe.Title</a>
             }  

@@ -15,7 +15,7 @@ namespace RecipeUI.Pages
     {
         private readonly IHttpClientFactory _httpClientFactory;
         public EditModel(IHttpClientFactory httpClientFactory) => _httpClientFactory = httpClientFactory;
-        public Recipe Recipe { get; set; } = default!;
+        public Recipe? Recipe { get; set; } = default!;
         public async Task OnGetAsync(int? id)
         {
             if (Recipe == null)
@@ -33,9 +33,9 @@ namespace RecipeUI.Pages
             var recipes = await JsonSerializer.DeserializeAsync<List<Recipe>>(json, options);
             if (recipes == null)
             {
-                BadRequest();
+                Page();
             }
-            Recipe = recipes.Find(x => x.Id == id);
+                Recipe = recipes!.Find(x => x.Id == id);
         }
         public async Task<IActionResult> OnPostAsync(int id ) 
         {

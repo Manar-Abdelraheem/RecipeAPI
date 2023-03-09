@@ -9,7 +9,7 @@ namespace RecipeUI.Pages
     {
         private readonly IHttpClientFactory _httpClientFactory;
         public IndexModel(IHttpClientFactory httpClientFactory) => _httpClientFactory = httpClientFactory;
-        public IEnumerable<Recipe> Recipes { get; set; } = default!;
+        public IEnumerable<Recipe>? Recipes { get; set; } = default!;
         public async Task OnGet()
         {
             var httpRequestMessage = new HttpRequestMessage(HttpMethod.Get, "https://localhost:7208/api/Recipes");
@@ -22,7 +22,7 @@ namespace RecipeUI.Pages
                 using var json = await httpResponseMessage.Content.ReadAsStreamAsync();
             if ( json == null)
             {
-                BadRequest();
+                Page();
             }
                 Recipes = await JsonSerializer.DeserializeAsync<List<Recipe>>(json!, options!);
         }
